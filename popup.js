@@ -202,7 +202,7 @@ function u(e) {
     console.log("Generated column names:", r);
 
   // THIS IS ACTUAL GENERATED CSV DATA  
-  var generatedCSVData = {
+  window.generatedCSVData = {
     fields: r,
     data: e.map(function (e) {
       return r.map(function (t) {
