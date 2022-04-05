@@ -1,6 +1,10 @@
 # Instant Data Scraper
 ## Chrome Extension
 
+## Bugs
+- The original extension is working fine, but suddenly this (unpacked) extension stopped working!!
+    - Error message (in JS Console) : `Unchecked runtime.lastError: Could not establish connection. Receiving end does not exist.`
+
 ### Feature Request by Anil Sir
 Add CSV Column Mapping:
     - **Why:** The default CSV generated has random column headings based on source HTML.
@@ -27,6 +31,6 @@ Add CSV Column Mapping:
 
 ### NOTES
 - In *popup.js*:
-    - CSV Data stored in `generatedCSVData` variable on line 205.
+    - CSV Data stored in `generatedCSVData` variable on line 205. (**Note:** I have made it a global variable now.)
     - `tableData` global variable holds all data about currently selected table, user modifications, etc.
 

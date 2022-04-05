@@ -451,7 +451,7 @@ function x(e, o) {
               );
           }),
         $("#copy")
-          .off("click")
+          .off("click")0
           .click(function () {
             console.log("Copying tsv data to clipboard"),
               m(),
