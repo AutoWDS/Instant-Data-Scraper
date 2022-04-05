@@ -33,7 +33,7 @@ function r(e) {
       ) &&
       $(this).text().trim().length
     ) {
-      var e = n($(this)).sort(),
+      var e = tableData($(this)).sort(),
         t = e.join(" ");
       t in o || (o[t] = 0),
         o[t]++,
@@ -188,7 +188,7 @@ async function p(e, t) {
           o +
           "/" +
           l.nodeName.toLowerCase() +
-          n(r)
+          tableData(r)
             .map((e) => "." + e)
             .join("");
         t(u(r).trim(), i),

@@ -20,9 +20,13 @@ Add CSV Column Mapping:
 ### PROBLEMS
 - Which URLs are "similar" ?
 - Where should mapping be stored (maybe in $HOME) ?
+- What format should mapping be stored in (maybe CSV) ?
 - How will the whole "Auto Generating Mapping" interface work?
     - Maybe allow renaming / leaving blank (or deleting) column names from generated CSV?
     - or maybe delegate to another program like Excel?
 
 ### NOTES
-- CSV Data stored in `generatedCSVData` variable on line 205 in [popup.js](popup.js).
+- In *popup.js*:
+    - CSV Data stored in `generatedCSVData` variable on line 205.
+    - `tableData` global variable holds all data about currently selected table, user modifications, etc.
+

@@ -63,7 +63,7 @@ function e(e, t, n, o, a, r, i) {
     });
 }
 var t = { id: parseInt(c("tabid")), url: c("url") },
-  n = {},
+  tableData = {},
   o = 1e3;
 console.log("currentTab.url: ", t.url);
 var a = null;
@@ -113,7 +113,7 @@ function l(e, o, a, r) {
     .show()
     .text(e),
     a && I(),
-    r && _gaq.push(["_trackEvent", "Error", n.startingUrl || t.url, e, 1]);
+    r && _gaq.push(["_trackEvent", "Error", tableData.startingUrl || t.url, e, 1]);
 }
 function u(e) {
   var t = e.length,
@@ -183,7 +183,7 @@ function u(e) {
     var a = {},
       r = [];
     return (
-      !(o in n.config.deletedFields) &&
+      !(o in tableData.config.deletedFields) &&
       (e.map(function (e) {
         for (var t, n = 0; n < s[o].length; n++)
           s[o][n] in e && ((t = e[s[o][n]]) in a || (a[t] = 0), a[t]++);
@@ -216,7 +216,7 @@ function u(e) {
 }
 function d(e) {
   return e.map(function (e) {
-    return e in n.config.headers ? n.config.headers[e] : e;
+    return e in tableData.config.headers ? tableData.config.headers[e] : e;
   });
 }
 function f(e) {
@@ -278,15 +278,15 @@ function m() {
   _gaq.push([
     "_trackEvent",
     "Download",
-    n.hostName,
-    n.startingUrl,
-    n.data.length,
+    tableData.hostName,
+    tableData.startingUrl,
+    tableData.data.length,
   ]);
 }
 function v() {
   console.log("Showing preview");
-  var e = u(n.data);
-  (e.data = e.data.slice(0, o)), (n.previewLength = e.data.length);
+  var e = u(tableData.data);
+  (e.data = e.data.slice(0, o)), (tableData.previewLength = e.data.length);
   var t = $(".wtHolder").scrollTop(),
     a = $(".wtHolder").scrollLeft(),
     r = !1;
@@ -320,7 +320,7 @@ function v() {
             $("<span>", {
               class: "glyphicon glyphicon-remove remove-column",
             }).click(function () {
-              (n.config.deletedFields[e.fields[t]] = !0),
+              (tableData.config.deletedFields[e.fields[t]] = !0),
                 b(),
                 $("#resetColumns").show(),
                 v();
@@ -336,7 +336,7 @@ function v() {
             var r = a.getColHeader();
             (r[t] = i.text()),
               console.log(i.text()),
-              (n.config.headers[e.fields[t]] = i.text()),
+              (tableData.config.headers[e.fields[t]] = i.text()),
               b(),
               a.updateSettings({ colHeaders: r });
           }),
@@ -349,7 +349,7 @@ function v() {
   });
 }
 function b() {
-  localStorage.setItem(n.configName, JSON.stringify(n.config));
+  localStorage.setItem(tableData.configName, JSON.stringify(tableData.config));
 }
 function S(e) {
   $("#waitHeader").hide(),
@@ -361,7 +361,7 @@ function S(e) {
     );
 }
 function k() {
-  return localStorage.getItem("nextSelector:" + n.hostName);
+  return localStorage.getItem("nextSelector:" + tableData.hostName);
 }
 function x(e, o) {
   if (!e)
@@ -371,14 +371,14 @@ function x(e, o) {
         chrome.tabs.reload(t.id, {}, function () {
           setTimeout(D, 1e3);
         }));
-  (n.tableId = e.tableId),
-    (n.scraping = !1),
-    (n.tableSelector = e.tableSelector),
-    (n.startingUrl = e.href),
-    (n.hostName = e.hostname),
-    (n.previewLength = 0),
-    (n.configName = e.hostname + "-config"),
-    (n.config = JSON.parse(localStorage.getItem(n.configName)) || {
+  (tableData.tableId = e.tableId),
+    (tableData.scraping = !1),
+    (tableData.tableSelector = e.tableSelector),
+    (tableData.startingUrl = e.href),
+    (tableData.hostName = e.hostname),
+    (tableData.previewLength = 0),
+    (tableData.configName = e.hostname + "-config"),
+    (tableData.config = JSON.parse(localStorage.getItem(tableData.configName)) || {
       headers: {},
       deletedFields: {},
       crawlDelay: 1e3,
@@ -387,24 +387,24 @@ function x(e, o) {
     _gaq.push([
       "_trackEvent",
       o ? "OpenPopup" : "AnotherTable",
-      n.hostName,
-      n.startingUrl,
+      tableData.hostName,
+      tableData.startingUrl,
       1,
     ]),
-    Object.keys(n.config.deletedFields).length && $("#resetColumns").show();
+    Object.keys(tableData.config.deletedFields).length && $("#resetColumns").show();
   var a = y(t.url);
   $("#wrongTable").show(),
-    n.config.infinateScrollChecked && $("#infinateScroll").click(),
+    tableData.config.infinateScrollChecked && $("#infinateScroll").click(),
     chrome.tabs.sendRequest(t.id, { action: "getTableData" }, function (e) {
-      e.tableId == n.tableId &&
-        (n.pages ||
+      e.tableId == tableData.tableId &&
+        (tableData.pages ||
           ($("#nextButton").show(),
-          (n.nextSelector = k()),
-          console.log("Next selector for " + n.hostName, n.nextSelector),
-          n.nextSelector &&
+          (tableData.nextSelector = k()),
+          console.log("Next selector for " + tableData.hostName, tableData.nextSelector),
+          tableData.nextSelector &&
             chrome.tabs.sendRequest(
               t.id,
-              { action: "markNextButton", selector: n.nextSelector },
+              { action: "markNextButton", selector: tableData.nextSelector },
               function (e) {
                 e.error ||
                   ($("#nextButton").hide(), $("#startScraping").show());
@@ -416,11 +416,11 @@ function x(e, o) {
           'Download data or locate "Next" to crawl multiple pages',
           "instructions"
         ),
-        (n.data = e.data),
-        (n.pages = 1),
-        (n.lastRows = e.data.length),
-        (n.tableSelector = e.tableSelector),
-        (n.workingTime = 0),
+        (tableData.data = e.data),
+        (tableData.pages = 1),
+        (tableData.lastRows = e.data.length),
+        (tableData.tableSelector = e.tableSelector),
+        (tableData.workingTime = 0),
         L(),
         v(),
         $(".download-button").show(),
@@ -431,7 +431,7 @@ function x(e, o) {
               m(),
               E({ download: !0 }),
               saveAs(
-                new Blob([Papa.unparse(f(n.data))], {
+                new Blob([Papa.unparse(f(tableData.data))], {
                   type: "application/octet-stream",
                 }),
                 a + ".csv"
@@ -444,7 +444,7 @@ function x(e, o) {
               m(),
               E({ download: !0 }),
               saveAs(
-                new Blob([p(w(f(n.data), t.url.substring(0, 100)))], {
+                new Blob([p(w(f(tableData.data), t.url.substring(0, 100)))], {
                   type: "application/octet-stream",
                 }),
                 a + ".xlsx"
@@ -456,7 +456,7 @@ function x(e, o) {
             console.log("Copying tsv data to clipboard"),
               m(),
               E({ download: !0 }),
-              R(Papa.unparse(f(n.data), { delimiter: "\t" }));
+              R(Papa.unparse(f(tableData.data), { delimiter: "\t" }));
           }));
     });
 }
@@ -488,10 +488,10 @@ function N() {
   return $("#infinateScroll").is(":checked");
 }
 function C(e) {
-  n.data = n.data.concat(e);
+  tableData.data = tableData.data.concat(e);
   var t = new Set();
-  n.data.forEach((e) => t.add(JSON.stringify(e))),
-    (n.data = Array.from(t, (e) => JSON.parse(e)));
+  tableData.data.forEach((e) => t.add(JSON.stringify(e))),
+    (tableData.data = Array.from(t, (e) => JSON.parse(e)));
 }
 function q() {
   $("#stopScraping").click(I),
@@ -499,36 +499,36 @@ function q() {
       "propertychange change click keyup input paste",
       function () {
         var e = $(this).val();
-        if (isNaN(e) || e < 0 || parseInt(1e3 * e) >= n.config.maxWait)
+        if (isNaN(e) || e < 0 || parseInt(1e3 * e) >= tableData.config.maxWait)
           return l("Bad min waiting value", "inputError");
-        l("", "inputError"), (n.config.crawlDelay = parseInt(1e3 * e)), b();
+        l("", "inputError"), (tableData.config.crawlDelay = parseInt(1e3 * e)), b();
       }
     ),
     $("#maxWait").bind(
       "propertychange change click keyup input paste",
       function () {
         var e = $(this).val();
-        if (isNaN(e) || parseInt(1e3 * e) <= n.config.crawlDelay)
+        if (isNaN(e) || parseInt(1e3 * e) <= tableData.config.crawlDelay)
           return l("Bad max waiting value", "inputError");
-        l("", "inputError"), (n.config.maxWait = parseInt(1e3 * e)), b();
+        l("", "inputError"), (tableData.config.maxWait = parseInt(1e3 * e)), b();
       }
     ),
     $("#resetColumns").click(function () {
-      (n.config.deletedFields = {}), b(), $("#resetColumns").hide(), v();
+      (tableData.config.deletedFields = {}), b(), $("#resetColumns").hide(), v();
     }),
     $("#infinateScroll").click(function (e) {
       $(this).is(":checked")
-        ? ((n.config.infinateScrollChecked = !0),
+        ? ((tableData.config.infinateScrollChecked = !0),
           $("#nextButton").hide(),
           $("#startScraping").show())
-        : ((n.config.infinateScrollChecked = !1),
+        : ((tableData.config.infinateScrollChecked = !1),
           $("#nextButton").show(),
           $("#startScraping").hide()),
         b();
     });
 }
 function I() {
-  (n.scraping = !1),
+  (tableData.scraping = !1),
     console.log("Scraping stopped."),
     $("#startScraping").show(),
     $("#stopScraping").hide(),
@@ -576,7 +576,7 @@ function E(e) {
         (t.lastDownloads = t.downloads),
         (t.lastRows = t.rows)),
       "now" == e.rate && (t.rated = !0))
-    : (1 == n.pages && t.tabs++, t.pages++, (t.rows += n.lastRows)),
+    : (1 == tableData.pages && t.tabs++, t.pages++, (t.rows += tableData.lastRows)),
     !t.rated &&
       new Date().getTime() - t.lastRateRequest > 52704e5 &&
       t.downloads - t.lastDownloads > 9 &&
@@ -587,20 +587,20 @@ function E(e) {
 function L() {
   $("#stats")
     .empty()
-    .append($("<div>", { text: "Pages scraped: " + n.pages }))
-    .append($("<div>", { text: "Rows collected: " + n.data.length }))
-    .append($("<div>", { text: "Rows from last page: " + n.lastRows }))
+    .append($("<div>", { text: "Pages scraped: " + tableData.pages }))
+    .append($("<div>", { text: "Rows collected: " + tableData.data.length }))
+    .append($("<div>", { text: "Rows from last page: " + tableData.lastRows }))
     .append(
       $("<div>", {
-        text: "Working time: " + parseInt(n.workingTime / 1e3) + "s",
+        text: "Working time: " + parseInt(tableData.workingTime / 1e3) + "s",
       })
     ),
     _gaq.push([
       "_trackEvent",
       "GotRows",
-      n.hostName,
-      n.startingUrl,
-      n.lastRows,
+      tableData.hostName,
+      tableData.startingUrl,
+      tableData.lastRows,
     ]),
     E({});
 }
@@ -612,30 +612,30 @@ r(),
     $("#nextButton").hide(),
       $("#infinateScrollElement").hide(),
       l('Mark "Next" button or link', "instructions"),
-      (n.gettingNext = !0),
+      (tableData.gettingNext = !0),
       (function e() {
         chrome.tabs.sendRequest(
           t.id,
           { action: "getNextButton" },
           function (t) {
-            n.scraping ||
-              (n.gettingNext && e(),
+            tableData.scraping ||
+              (tableData.gettingNext && e(),
               t.selector &&
                 ($("#startScraping").show(),
                 l(
                   '"Next" button located. Press "Start crawling" to get more pages or mark another button/link if marked incorrectly.',
                   "instructions"
                 ),
-                (n.nextSelector = t.selector),
-                localStorage.setItem("nextSelector:" + n.hostName, t.selector),
+                (tableData.nextSelector = t.selector),
+                localStorage.setItem("nextSelector:" + tableData.hostName, t.selector),
                 console.log(t)));
           }
         );
       })();
   }),
   $("#startScraping").click(function () {
-    (n.gettingNext = !1),
-      (n.scraping = !0),
+    (tableData.gettingNext = !1),
+      (tableData.scraping = !0),
       console.log("Starting scraping..."),
       $("#startScraping").hide(),
       $("#nextButton").hide(),
@@ -655,7 +655,7 @@ r(),
       var s = function (e) {
         chrome.tabs.sendRequest(
           t.id,
-          { action: "clickNext", selector: n.nextSelector },
+          { action: "clickNext", selector: tableData.nextSelector },
           function (t) {
             if (t && t.error)
               return l("", "instructions"), l(t.error, t.errorId, !0);
@@ -669,7 +669,7 @@ r(),
           function () {
             chrome.tabs.sendRequest(
               t.id,
-              { action: "getTableData", selector: n.tableSelector },
+              { action: "getTableData", selector: tableData.tableSelector },
               function (e) {
                 if (e) {
                   if (e.error)
@@ -677,24 +677,24 @@ r(),
                       l("", "instructions"),
                       l(e.error, e.errorId || "error", !0)
                     );
-                  (n.lastRows = e.data.length),
-                    n.pages++,
-                    (n.workingTime += new Date() - a),
+                  (tableData.lastRows = e.data.length),
+                    tableData.pages++,
+                    (tableData.workingTime += new Date() - a),
                     (a = new Date()),
                     C(e.data),
                     L(),
-                    n.previewLength < o
+                    tableData.previewLength < o
                       ? v()
                       : l("Preview limited to 1000 rows.", "previewLimit"),
-                    n.scraping && r();
+                    tableData.scraping && r();
                 }
               }
             );
           },
           t.id,
-          n.config.maxWait,
+          tableData.config.maxWait,
           100,
-          n.config.crawlDelay,
+          tableData.config.crawlDelay,
           function (e) {
             chrome.tabs.sendRequest(t.id, {}, function (t) {
               e(void 0 !== t);
