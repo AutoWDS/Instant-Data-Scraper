@@ -1,13 +1,14 @@
 /*! InstantDataScraperNext - 2021-01-21 */
 
-function e(e) {
-  return Math.max.apply(
-    null,
-    Object.keys(e).map(function (t) {
-      return e[t];
-    })
-  );
+/**
+ * Maximum value in object
+ * @param {*} obj 
+ * @returns number
+ */
+function maxObjectValue(obj) {
+  return Math.max(...Object.values(obj));
 }
+
 function t(e, t) {
   return (
     (t || ".") +
