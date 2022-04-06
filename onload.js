@@ -15,14 +15,17 @@ function t(e, t) {
     e.replace(/[!"#$%&'()*+,.\/:;<=>?@[\\\]^`{|}~]/g, "\\$&").trim()
   );
 }
-function n(e) {
-  return (e.attr("class") || "")
-    .trim()
-    .split(/\s+/)
-    .filter(function (e) {
-      return e;
-    });
+
+/**
+ * List of CSS Classes of HTML Element
+ * @param {HTMLElement} elem 
+ * @returns ArrayLike<String>
+ */
+function getClassList(elem) {
+  return elem.classList;
 }
+
+
 function r(e) {
   var t = $(e).children(),
     r = {},
